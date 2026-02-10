@@ -6,29 +6,31 @@ const { successResponse, errorResponse } = require('../utils/response');
 const activityLogService = require('../services/activityLog.service');
 
 /* Create a new user */
-exports.createUser = async (req, res, next) => {
+exports.createUser = async (req, res ) => {
     try {
-        const { name, email, password, role } = req.body;
+        if (req.user.role !== 'Admin') {
+            return errorResponse(res, 403, 'Access denied');
+            
+            const { username, email, password, role } = req.body;
 
-        // Basic validation
-        if (!name || !email || !password || !role) {
-            return res.status(400).json(errorResponse('All fields are required'));
+        // Validation
+        if (!username || !email || !password || !role) {
+            return errorResponse(res, 400, 'All fields are required');
         }
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email });  
         if (existingUser) {
-            return res.status(400).json(errorResponse('Email already in use'));
+            return errorResponse(res, 400, 'Email already in use');
         }
-
         const userRole = await Role.findOne({ name: role });
         if (!userRole) {
-            return res.status(400).json(errorResponse('Invalid role specified'));
+            return errorResponse(res, 400, 'Invalid role specified');
         }
 
         const newUser = new User({
-            name,
+            username,
             email,
-            password, // hashed in pre-save hook in  user.model.js
+            password, // hashed in pre-save hook in user.model.js
             role: userRole._id
         });
 
@@ -38,7 +40,6 @@ exports.createUser = async (req, res, next) => {
             action: 'create_user',
             details: `Created user with email: ${email}`
         });
-
         await newUser.save();
         res.status(201).json(successResponse('User created successfully', newUser));
     } catch (error) {

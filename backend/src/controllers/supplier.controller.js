@@ -5,117 +5,145 @@ const { successResponse, errorResponse } = require('../utils/response');
 const activityLogService = require('../services/activityLog.service');
 
 /* Create a new supplier */
-exports.createSupplier = async (req, res, next) => {
+exports.createSupplier = async (req, res) => {
     try {
-        const { name, email, phone, address, contactPerson, contractDetails } = req.body;
-
-        if (!name || !email || !phone) {
-            return res.status(400).json(errorResponse('Name, email, and phone are required'));
-        }
-
-        const existing = await Supplier.findOne({ name });
-        if (existing) {
-            return res.status(400).json(errorResponse('Supplier with this name already exists'));
-        }
-
-        const supplier = new Supplier({
-            name,
+        const { 
+            name, 
             email,
             phone,
             address,
             contactPerson,
-            contractDetails
+            contactDetails
+        } = req.body;
+
+        if (!name || !email || !phone ) {
+            return errorResponse(res, 400, 'Name, email and phone are required');
+        }
+
+        // Prevent duplicate supplier (by name or email)
+        const existingSupplier = await Supplier.findOne({
+            $or: [{ name: name.trim() }, { email: email.trim() }]
         });
 
-        // Log activity
-        await activityLogService.logActivity({
-            userId: req.user.id,
-            action: 'create_supplier',
-            details: `Created supplier ${name}`
+        if (existingSupplier)
+            return errorResponse(res, 409, 'Supplier with the same name or email already exists');
+        }
+
+        const supplier = await Supplier.create({
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            address: address ? address.trim() : '',
+            contactPerson: contactPerson ? contactPerson.trim() : '',
+            contactDetails: contactDetails ? contactDetails.trim() : ''
         });
-        
-        const savedSupplier = await supplier.save();
-        res.status(201).json(successResponse(savedSupplier, 'Supplier created successfully'));
-    } catch (err) {
-        next(err);
+
+        await activityLogService.logActivity(
+            req.user.id,
+             'CREATE_SUPPLIER',
+            `Created supplier: ${supplier.name} (ID: ${supplier._id})`
+        );
+
+        return successResponse(res, 201, 'Supplier created successfully', supplier);
+    } catch (error) {
+        console.error('Error creating supplier:', error);
+        return errorResponse(res, 500, 'An error occurred while creating the supplier');
     }
 };
 
 /* Get all suppliers */
-exports.getSuppliers = async (req, res, next) => {
+exports.getSuppliers = async (req, res) => {
     try {
-        const suppliers = await Supplier.find();
-        res.json(successResponse(suppliers, 'Suppliers retrieved successfully'));
-    } catch (err) {
-        console.error('Error fetching suppliers:', err);
-        next(err);
+        const suppliers = await Supplier.find().sort({ createdAt: -1 });
+        return successResponse(res, 200, 'Suppliers retrieved successfully', suppliers);
+    } catch (error) {
+        console.error('Error fetching suppliers:', error);
+        return errorResponse(res, 500, 'An error occurred while fetching suppliers');
     }
 };
 
-/* Get a supplier by ID */
-exports.getSupplierById = async (req, res, next) => {
+/* Get a single supplier by ID */
+exports.getSupplierById = async (req, res) => {
     try {
         const supplier = await Supplier.findById(req.params.id);
         if (!supplier) {
-            return res.status(404).json(errorResponse('Supplier not found'));
+            return errorResponse(res, 404, 'Supplier not found');
         }
-        res.json(successResponse(supplier, 'Supplier retrieved successfully'));
-    } catch (err) {
-        console.error('Error fetching supplier:', err);
-        next(err);
+
+        return successResponse(res, 200, 'Supplier retrieved successfully', supplier);
+    } catch (error) {
+        console.error('Error fetching supplier:', error);
+        return errorResponse(res, 500, 'An error occurred while fetching the supplier');
     }
 };
 
 /* Update a supplier */
-exports.updateSupplier = async (req, res, next) => {
+exports.updateSupplier = async (req, res) => {
     try {
-        const { name, email, phone, address, contactPerson, contractDetails } = req.body;
-        
-        const supplier = await Supplier.findById(req.params.id);
+        const updates = req.body;
+        const supplier = await Supplier.findByIdAndUpdate(req.params.id, updates, { new: true });
         if (!supplier) {
-            return res.status(404).json(errorResponse('Supplier not found'));
+            return errorResponse(res, 404, 'Supplier not found');
         }
 
-        supplier.name = name || supplier.name;
-        supplier.email = email || supplier.email;
-        supplier.phone = phone || supplier.phone;
-        supplier.address = address || supplier.address;
-        supplier.contactPerson = contactPerson || supplier.contactPerson;
-        supplier.contractDetails = contractDetails || supplier.contractDetails;
+        // Prevent duplicate email/name on update
+        if (updates.name || updates.email) {
+            const duplicate = await Supplier.findOne({
+                _id: { $ne: req.params.id },
+                $or: [
+                    { name: updates.name ? updates.name.trim() : null },
+                    { email: updates.email ? updates.email.trim() : null }
+                ].filter(Boolean)
+            });
 
-        // Log activity
-        await activityLogService.logActivity({
-            userId: req.user.id,
-            action: 'update_supplier',
-            details: `Updated supplier ${supplier.name}`
-        }); 
+            if (duplicate) {
+                return errorResponse(res, 409, 'Supplier with the same name or email already exists');
+            }
+        }
+        
+        Object.keys(updates).forEach(key => {
+            if (typeof updates[key] === 'string') {
+                updates[key] = updates[key].trim();
+            }
+        });
 
-        const updatedSupplier = await supplier.save();
-        res.json(successResponse(updatedSupplier, 'Supplier updated successfully'));
-    } catch (err) {
-        console.error('Error updating supplier:', err);
-        next(err);
+        await supplier.save();
+
+        await activityLogService.logActivity(
+            req.user.id,
+            'UPDATE_SUPPLIER',
+            `Updated supplier: ${supplier.name} (ID: ${supplier._id})`
+        );
+
+        return successResponse(res, 200, 'Supplier updated successfully', supplier);
+    } catch (error) {
+        console.error('Error updating supplier:', error);
+        return errorResponse(res, 500, 'An error occurred while updating the supplier');
     }
 };
 
 /* Delete a supplier */
-exports.deleteSupplier = async (req, res, next) => {
+exports.deleteSupplier = async (req, res) => {
     try {
-        const supplier = await Supplier.findById(req.params.id);
+        const supplier = await Supplier.findByIdAndDelete(req.params.id);
         if (!supplier) {
-            return res.status(404).json(errorResponse('Supplier not found'));
+            return errorResponse(res, 404, 'Supplier not found');
         }
-        await supplier.remove();
-        
-        // Log activity
-        await activityLogService.logActivity({
-            userId: req.user.id,
-            action: 'delete_supplier',
-            details: `Deleted supplier ${supplier.name}`
-        });
-        res.json(successResponse(null, 'Supplier deleted successfully'));
-    } catch (err) {
-        console.error('Error deleting supplier:', err);
-        next(err);
+
+        // Hard delete (can be switched to soft delete easily)
+        await supplier.deleteOne();
+
+        await activityLogService.logActivity(
+            req.user.id,
+            'DELETE_SUPPLIER',
+            `Deleted supplier: ${supplier.name} (ID: ${supplier._id})`
+        );
+        return successResponse(res, 200, 'Supplier deleted successfully');
+    } catch (error) {
+        console.error('Error deleting supplier:', error);
+        return errorResponse(res, 500, 'An error occurred while deleting the supplier');
     }
 };
+
+
+

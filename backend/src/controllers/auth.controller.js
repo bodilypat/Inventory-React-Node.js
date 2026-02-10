@@ -8,20 +8,17 @@ const { successResponse, errorResponse } = require('../utils/response');
 /* Register a new user */
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, role } = req.body;
+        const { username, email, password } = req.body;
 
-        // Basic validation
+        // Validation
         if (!username || !email || !password) {
             return errorResponse(res, 400, 'Username, email, and password are required');
         }
-
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return errorResponse(res, 400, 'Email already in use');
         }
-
-        // Hash password 
+        // Hash password
         const hashedPassword = await bcrypt.hash(password, 12);
 
         // Create new user
@@ -29,8 +26,11 @@ exports.register = async (req, res) => {
             username,
             email,
             password: hashedPassword,
-            role: role || 'Staff' // Default role is 'Staff'
+            role: 'Staff' // Default role is 'Staff'
         });
+
+        // Save user to database
+        await newUser.save();
 
         // Generate JWT token
         const token = sign({ id: newUser._id, email: newUser.email, role: newUser.role });
