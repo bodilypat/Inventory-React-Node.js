@@ -1,57 +1,39 @@
-//src/components/layout/Header.jsx 
-
-/* 
-** App Title / Logo
-** Global Search (product, orders, customers) 
-** Notification (Low Stock alerts)
-** Dark Mode Toggle(Option)
-** User Info Dropdown 
-** Logout 
-** Role Badge (Admin / Manager / Staff) 
-*/
+//src/components/layout/Sidebar.jsx 
 
 import React from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Badge, Menu, MenuItem } from '@mui/material';
-import { Notifications as NotificationsIcon, AccountCircle } from '@mui/icons-material';
+import { NavLink } from 'react-router-dom';
 
-const Header = () => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    }
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    }
+const Sidebar = () => {
+    const linkStyle  =  "block py-2 px-4 text-gray-700 hover:bg-gray-200 rounded";
+    const activeLinkStyle = "bg-gray-300 font-bold";
 
     return (
-        <AppBar position="static">
-            <Toolbar>
-                <Typography variant="h6" style={{ flexGrow: 1 }}>
-                    Inventory Management
-                </Typography>
-                <IconButton color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <IconButton color="inherit" onClick={handleMenu}>
-                    <AccountCircle />
-                </IconButton>
-                <Menu
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
-                </Menu>
-            </Toolbar>
-        </AppBar>
+        <aside className="w-64 bg-gray-100 p-4">
+            <nav>
+                <NavLink to="/" className={({ isActive }) => isActive ? `${linkStyle} ${activeLinkStyle}` : linkStyle}>
+                    Dashboard
+                </NavLink>
+                <NavLink to="/profile" className={({ isActive }) => isActive ? `${linkStyle} ${activeLinkStyle}` : linkStyle}>
+                    Inventory   
+                </NavLink>
+                <NavLink to="/settings" className={({ isActive }) => isActive ? `${linkStyle} ${activeLinkStyle}` : linkStyle}>
+                    Purchase Orders
+                </NavLink>
+                <NavLink to="/reports" className={({ isActive }) => isActive ? `${linkStyle} ${activeLinkStyle}` : linkStyle}>
+                    Sales Orders 
+                </NavLink>
+                <NavLink to="/users" className={({ isActive }) => isActive ? `${linkStyle} ${activeLinkStyle}` : linkStyle}>
+                    Suppliers 
+                </NavLink>
+                <NavLink to="/settings" className={({ isActive }) => isActive ? `${linkStyle} ${activeLinkStyle}` : linkStyle}>
+                    Customers
+                </NavLink>
+                <NavLink to="/reports" className={({ isActive }) => isActive ? `${linkStyle} ${activeLinkStyle}` : linkStyle}>
+                    Reports
+                </NavLink>
+            </nav>
+        </aside>
     );
 };
 
-export default Header;
-
+export default Sidebar;
