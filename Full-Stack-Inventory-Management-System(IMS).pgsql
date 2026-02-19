@@ -136,84 +136,77 @@ Full-Stack-Inventory-Management-System(IMS)
 │   ├── alembic.ini
 │   └── README.md
 │   
-├── frontend/ (React • JavaScript • HTML • CSS) component -> pages -> hooks -> services -> routes -> utils -> App.jsx
+├── frontend/ (React • JavaScript • HTML • CSS) components -> pages -> hooks -> services -> routes -> utils -> App.jsx
 │   │
 │   ├── src/
 │   │   ├── components/                                         # Reusable UI & composed components
 │   │   │   ├── ui/                            
-│   │   │   │   ├── ProductCard.jsx
-│   │   │   │   ├── CategorySelect.jsx
-│   │   │   │   ├── ProductImageUpload.jsx
-│   │   │   │   ├── SupplierSelect.jsx                          # Dropdown selector for forms
-│   │   │   │   ├── SupplierDetailsCard.jsx                     # Shows supplier info (Like ProductCard)
-│   │   │   │   ├── StockBadge.jsx                              # Small visual indicator
-│   │   │   │   ├── InvoicePreview.jsx                          # Preview invoice for a sale
-│   │   │   │   ├── CustomerSelect.jsx                          # Dropdown to select customer
-│   │   │   │   ├── SalesSummaryCard.jsx                        # Summary of total sales
-│   │   │   │   ├── PurchaseSummaryCard.jsx                     # Summary of total purchase
-│   │   │   │   └── ReportSummaryCard.jsx                       # Summary for any report
-│   │   │   ├── forms/                            
-│   │   │   │   ├── ProductForm.jsx                             # Add Product
-│   │   │   │   ├── EditProductForm.jsx                         # Edit existing product
-│   │   │   │   ├── SupplierForm.jsx                            # Add new supplier
-│   │   │   │   ├── EditSupplierForm.jsx                        # Edit supplier
-│   │   │   │   ├── StockInForm.jsx                             # Add stock table
-│   │   │   │   ├── StockOutForm.jsx                            # Reduce stock / sales mistakes
-│   │   │   │   ├── StockAdjustmentForm.jsx                     # Correct inventory misstakes
-│   │   │   │   ├── SalesForm.jsx                               # Create a new sale
-│   │   │   │   └── PurchaseForm.jsx                            # Create a new purchase
-│   │   │   ├── tables/                            
-│   │   │   │   ├── ProductTable.jsx                            # List of products
-│   │   │   │   ├── ProductFilter.jsx                           # Search, filter, sort
-│   │   │   │   ├── SupplierTable.jsx                           # List suppliers 
-│   │   │   │   ├── SupplierFilter.jsx                          # Search / Filter purchases by supplier
-│   │   │   │   ├── StockTable.jsx                              # List suppliers
-│   │   │   │   ├── StockFilter.jsx                             # Search / filter products
-│   │   │   │   ├── SalesTable.jsx                              # List of sales
-│   │   │   │   ├── SalesFilter.jsx                             # Search / filter sales
-│   │   │   │   ├── PurchaseReportTable                         # Purchase report table
-│   │   │   │   ├── SalesReportTable.jsx                        # Sales report table
-│   │   │   │   ├── PurchaseTable.jsx                           # Purchase report table
-│   │   │   │   ├── InventoryReportTable.jsx                    # Inventory report table
-│   │   │   │   └── ProfitLossTable.jsx                         # Profit & loss report table
-│   │   │   ├── filters/                            
-│   │   │   │   └── ReportFilter.jsx                            # Date range, type, or category filter
-│   │   │   └── index.js
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Card.jsx
+│   │   │   │   ├── Input.jsx
+│   │   │   │   ├── Select.jsx                          
+│   │   │   │   ├── Badge.jsx                    
+│   │   │   │   ├── Modal.jsx                              
+│   │   │   │   ├── Table.jsx
+│   │   │   │   ├── Alert.jsx                      
+│   │   │   │   ├── Tooltip.jsx                    
+│   │   │   │   ├── Tab.jsx  
+│   │   │   │   ├── Accordion.jsx                  
+│   │   │   │   ├── Breadcrumb.jsx               
+│   │   │   │   ├── Pagination.jsx     
+│   │   │   │   ├── Loader.jsx                      
+│   │   │   │   └── index.js                     
+│   │   │   ├── layout/                            
+│   │   │   │   ├── MainLayout.jsx                                    # Wrapper layout (Header + Sidebar + content)
+│   │   │   │   ├── AuthLayout.jsx
+│   │   │   │   ├── Header.jsx                                        
+│   │   │   │   ├── Sidebar.jsx                                       
+│   │   │   │   ├── Footer.jsx                                        
+│   │   │   │   ├── PageContainer.jsx                                
+│   │   │   │   └── ProtectedRoute.jsx                               
+│   │   │   ├── forms/ 
+│   │   │   │   ├── ProductForm.jsx                 
+│   │   │   │   ├── CategoryForm.jsx
+│   │   │   │   ├── SupplierForm.jsx
+│   │   │   │   ├── CustomerForm.jsx
+│   │   │   │   ├── WarehouseForm.jsx
+│   │   │   │   ├── PurchaseOrderForm.jsx
+│   │   │   │   ├── SalesOrderForm.jsx
+│   │   │   │   ├── StockAdjustmentForm.jsx
+│   │   │   │   └── UserForm.jsx
+│   │   │   ├── charts/ 
+│   │   │   │   ├── BarChart.jsx                              # Generic Bar Chart
+│   │   │   │   ├── LineChart.jsx                             # Generic Line Chart
+│   │   │   │   ├── PieChart.jsx                              # Generic Pie / Doughtnut Chart
+│   │   │   │   ├── Inventory.jsx                             # Stock levels per product / Category
+│   │   │   │   ├── SalesChart.jsx                            # Sales trends over time 
+│   │   │   │   ├── PurchaseChart.jsx                         # Purchase trends over time 
+│   │   │   │   └── ChartWrapper.jsx                          # Optional wrapper for consistent styling/layout
+│   │   │   │       ├── 
+│   │   │   │       ├── 
+│   │   │   │       └── 
+│   │   │   └── styles/
+│   │   │       └── globals.css
 │   │   │
-│   │   ├── pages/                                              # Route-level pages (feature grouped)
+│   │   ├── pages/                                           # Route-level pages (feature grouped)
 │   │   │   ├── auth/    
 │   │   │   │   ├── Login.jsx
 │   │   │   │   ├── Register.jsx
-│   │   │   │   └── ResetPassword.jsx             
-│   │   │   ├── Dashboard/
-│   │   │   │   └── Dashboard.jsx
-│   │   │   ├── products/
-│   │   │   │   ├── ProductsList.jsx
-│   │   │   │   ├── AddProduct.jsx
-│   │   │   │   ├── EditProduct.jsx
-│   │   │   │   └── ProductDetail.jsx
-│   │   │   ├── stock/
-│   │   │   │   ├── StockDashboard.jsx
-│   │   │   │   ├── StockIn.jsx
-│   │   │   │   ├── StockOut.jsx
-│   │   │   │   ├── StockAdjustment.jsx
-│   │   │   │   └── StockHistory.jsx
-│   │   │   ├── sales/
-│   │   │   │   ├── SalesList.jsx
-│   │   │   │   ├── CreateSale.jsx
-│   │   │   │   ├── SaleDetails.jsx
-│   │   │   │   └── SalesReport.jsx
-│   │   │   ├── purchases/
-│   │   │   │   ├── purchaseList.jsx
-│   │   │   │   ├── CreatePurchase.jsx
-│   │   │   │   ├── PurchaseDetails.jsx
-│   │   │   │   └── PurchaseReport.jsx
-│   │   │   └── reports/
-│   │   │       ├── ReportsDashboard.jsx
-│   │   │       ├── SalesReport.jsx
-│   │   │       ├── PurchaseReport.js
-│   │   │       ├── InventoryReport.js
-│   │   │       └── ProfitLossReport.js   
+│   │   │   │   ├── ForgotPassword.jsx     
+│   │   │   │   └── ResetPassword.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── products.jsx
+│   │   │   ├── Inventory.jsx
+│   │   │   ├── Categories.jsx
+│   │   │   ├── Suppliers.jsx
+│   │   │   ├── Customer.jsx
+│   │   │   ├── PurchaseOrder.jsx
+│   │   │   ├── SalesOrder.jsx
+│   │   │   ├── Report.jsx
+│   │   │   ├── setting.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── NotFound.jsx 
 │   │   │      
 │   │   ├── services/                                          # All backend API calls
 │   │   │   ├── authService.js    
