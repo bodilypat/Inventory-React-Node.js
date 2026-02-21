@@ -2,138 +2,56 @@ Full-Stack-Inventory-Management-System(IMS)
 ├── backend(Node.js)
 │   ├── src/
 │   │   ├── app.js                          
-│   │   ├── server.js
-│   │   │
-│   │   ├── config/                             
+│   │   ├── config/                                     # Database connection, Environment config 
 │   │   │   ├── db.js
-│   │   │   ├── env.js
 │   │   │   └── index.js
 │   │   │
-│   │   ├── controllers/                                
-│   │   │   ├── auth/
-│   │   │   │   ├── auth.controller.js
-│   │   │   │   └── session.controller.js                    
-│   │   │   ├── user/
-│   │   │   │   ├── user.controller.js
-│   │   │   │   ├── role.controller.js
-│   │   │   │   └── permission.controller.js
-│   │   │   ├── masters/
-│   │   │   │   ├── product.controller.js
-│   │   │   │   ├── category.controller.js
-│   │   │   │   └── supplier.controller.js
-│   │   │   ├── inventory/
-│   │   │   │   ├── stock.controller.js
-│   │   │   │   ├── batch.controller.js
-│   │   │   │   └── serial.controller.js
-│   │   │   ├── purchasing/
-│   │   │   │   ├── purchase.controller.js
-│   │   │   │   ├── grn.controller.js
-│   │   │   │   └── purchaseReturn.controller.js
-│   │   │   ├── sales/
-│   │   │   │   ├── sales.controller.js
-│   │   │   │   └── saleReturn.controller.js
-│   │   │   ├── analytics/
-│   │   │   │   ├── salesAnalytics.controller.js
-│   │   │   │   ├── inventoryAnalytics.controller.js
-│   │   │   │   └── profitAnalytics.controller.js
-│   │   │   └── audit/
-│   │   │       ├── report.controller.js
-│   │   │       ├── dashboard.controller.js
-│   │   │       └── activityLog.controller.js   
-│   │   │   
-│   │   ├── services/                                       # Business Logic
-│   │   │   ├── auth/
-│   │   │   │   ├── auth.service.js
-│   │   │   │   └── session.service.js                      
-│   │   │   ├── users/
-│   │   │   │   ├── user.service.js
-│   │   │   │   ├── role.service.js
-│   │   │   │   └── permission.service.js
-│   │   │   ├── masters/
-│   │   │   │   ├── product.service.js                       
-│   │   │   │   ├── category.service.js                      
-│   │   │   │   └── supplier.service.js    
-│   │   │   ├── inventorys/             
-│   │   │   │   ├── stock.service.js                         
-│   │   │   │   ├── batch.service.js                        
-│   │   │   │   └── serial.service.js                                   
-│   │   │   ├── purchasing/
-│   │   │   │   ├── purchase.service.js                      
-│   │   │   │   ├── grn.service.js                           
-│   │   │   │   └── purchaseReturn.service.js
-│   │   │   ├── sales/
-│   │   │   │   ├── sales.service.js                         
-│   │   │   │   └── saleReturn.service.js
-│   │   │   ├── analytics/
-│   │   │   │   ├── salesAnalytics.sevice.js
-│   │   │   │   ├── inventorAnalytics.service.js
-│   │   │   │   └── financeAnalytics.service.js
-│   │   │   └── audit/
-│   │   │       ├── report.service.js
-│   │   │       ├── dashboard.service.js
-│   │   │       └── activityLog.service.js                         
-│   │   ├── models/                                           
-│   │   │   ├── auth/
-│   │   │   │   └── session.model.js                          
-│   │   │   ├── user/
-│   │   │   │   ├── user.model.js
-│   │   │   │   ├── role.model.js
-│   │   │   │   └── permission.model.js
-│   │   │   ├── inventorys/                    
-│   │   │   │   ├── stock.model.js                         
-│   │   │   │   ├── batch.model.js                         
-│   │   │   │   └── serial.model.js                        
-│   │   │   ├── purchasing/
-│   │   │   │   ├── purchase.model.js                      
-│   │   │   │   ├── grn.model.js                           
-│   │   │   │   └── purchaseReturn.model.js
-│   │   │   ├── sales/
-│   │   │   │   ├── sales.model.js                         
-│   │   │   │   └── saleReturn.model.js
-│   │   │   ├── audit/
-│   │   │   │   └── activityLog.model.js
-│   │   │   └── index.js
-│   │   ├── routes/                                           
-│   │   │   ├── auth/
-│   │   │   │   └── auth.routes.js                          
-│   │   │   ├── user/
-│   │   │   │   ├── user.routes.js
-│   │   │   │   ├── role.routes.js
-│   │   │   │   └── permission.routes.js
-│   │   │   ├── inventory/                    
-│   │   │   │   ├── stock.routes.js                         
-│   │   │   │   ├── batch.routes.js                         
-│   │   │   │   └── serial.routes.js                        
-│   │   │   ├── purchasing/
-│   │   │   │   ├── purchase.routes.js                      
-│   │   │   │   ├── grn.routes.js                           
-│   │   │   │   └── purchaseReturn.routes.js
-│   │   │   ├── sales/
-│   │   │   │   ├── sales.routes.js                         
-│   │   │   │   └── saleReturn.routes.js
-│   │   │   ├── audit/
-│   │   │   │   └── activityLog.routes.js
-│   │   │   └── index.js
-│   │   │       
-│   │   ├── middleware/     
-│   │   │   ├── auth.middleware.js                         
-│   │   │   ├── permission.middleware.js                 
-│   │   │   ├── validate.middleware.js
-│   │   │   ├── error.middleware.js
-│   │   │   ├── notFound.middleware.js
-│   │   │   └── activity.middleware.js
-│   │   │ 
-│   │   ├── utils/                             
-│   │   │   ├── jwt.js
-│   │   │   ├── logger.js
-│   │   │   └── constants.js                  
-│   │   └── docs/    
-│   │       └── api.md        
+│   │   ├── models/                                     # Mongoose schemas 
+│   │   │   ├── Category.js                              
+│   │   │   ├── Supplier.js
+│   │   │   ├── Product.js                      
+│   │   │   ├── Customer.js
+│   │   │   ├── Warehouse.js                                  
+│   │   │   ├── Inventory.js
+│   │   │   ├── PurchaseOrder.js
+│   │   │   ├── PurchaseOrderItems.js
+│   │   │   ├── SaleOrder.js
+│   │   │   ├── SaleOrderItems.js
+│   │   │   ├── StockMovement.js
+│   │   │   ├── User.js
+│   │   │   ├── AuditLog.js
+│   │   │   └── Setting.js
+│   │   ├── controllers/                                 # Handle request & response, Call service
+│   │   │   ├── authController.js              
+│   │   │   ├── ProductController.js
+│   │   │   ├── OrderController.js
+│   │   │   └── inventoryController.js 
+│   │   ├── routes/                                      # API endpoint , Connect to controllers
+│   │   │   ├── authRoutes.js              
+│   │   │   ├── productRoute.js
+│   │   │   ├── orderRoutes.js
+│   │   │   └── inventoryRoutes.js 
+│   │   ├── services/                                    # Business logic layer , Keeps controller clean     
+│   │   │   ├── productService.js              
+│   │   │   ├── orderService.js
+│   │   │   └── inventoryService.js 
+│   │   ├── middlewares/                                 # Authentication(JWT) , Role-based access , Error handling
+│   │   │   ├── authMiddleware.js              
+│   │   │   ├── roleMiddleware.js
+│   │   │   ├── errorMiddleware.js
+│   │   │   └── validateMiddleware.js 
+│   │   ├── utils/                                       # Helper function, Token generation, Logging
+│   │   │   ├── generateToken.js
+│   │   │   ├── hashPassword.js
+│   │   │   └── logger.js            
+│   │   └── validations/                                 # Request body validation(Joi / Express-validator)
+│   │       ├── productValidation.js
+│   │       ├── userValidation.js
+│   │       └── orderValidation.js  
 │   │                         
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── requirements.txt
-│   ├── alembic.ini
+│   ├── server.js
+│   ├── .env
+│   ├── package.json
 │   └── README.md
 │   
 ├── frontend/ (React • JavaScript • HTML • CSS) components -> pages -> hooks -> services -> routes -> utils -> App.jsx
